@@ -84,7 +84,8 @@ the observed AUROC falls and the score over-predicts at every event rate we
 study, in simulation and on MIMIC-IV ward admissions (F7), while the Brier
 score, the metric the attribution game decomposes, rises at high event rates
 and falls at realistic ones ($+0.019$ at a $40\%$ event rate, $-0.008$ at
-$14\%$; Table~\ref{tab:prevalence}, Appendix~\ref{app:robustness}); the
+$14\%$, alert rate held at $20\%$; Table~\ref{tab:prevalence},
+Appendix~\ref{app:robustness}); the
 misattribution we study does not
 depend on that sign.
 
@@ -288,7 +289,9 @@ under standard care; they are exogenous unless deployment itself moves the
 patient mix, in which case the $X$ term absorbs that shift (F5). They form a
 Shapley game over $\{P(X), P(Y \mid X, A)\}$ with the policy fixed at $\pi_0$,
 identified when post-deployment outcomes under $\pi_0$ are observed, as in a
-randomised unalerted arm. The identity is exact, with interactions assigned by
+randomised unalerted arm. Without an action log the arm identifies the second
+term as a change in $P(Y \mid X)$ under standard care, so drift in standard
+care itself is booked to it. The identity is exact, with interactions assigned by
 a policy-last ordering: an asymmetric Shapley value~\citep{frye2020asymmetric}
 whose restriction encodes the decision, not a causal order, since the policy's
 post-deployment value is the decision contrast in the current patient mix.
@@ -649,7 +652,8 @@ $50\%$ or $75\%$ of events (Table~\ref{tab:mimic-sens}, Appendix~\ref{app:mimic}
 since with no
 treated pre-deployment patient it cannot see the action. Between the periods
 the Brier score rises by $+0.00190$ under historical care; with the alert
-deployed the observed change is $+0.00039$, because the policy contrast,
+deployed the observed change is $+0.00039$ (a mean over resampled
+replicates; the targets are exact), because the policy contrast,
 $-0.00147$, hides $77\%$ of the deterioration. The randomised arm estimates
 $-0.00154$ [$-0.00162$, $-0.00146$] and the exogenous change $+0.00193$
 [$+0.00186$, $+0.00201$]; the monitor assigns $-0.00244$ [$-0.00272$,
@@ -658,8 +662,10 @@ threshold, events averted at round eight are $0.154$ points for the kept
 score, $0.148$ [$0.145$, $0.152$] after naive refitting, $0.177$ [$0.173$,
 $0.181$] after refitting on untreated patients and $0.183$ [$0.178$, $0.187$]
 after the weighted refit: the naive refit learns the
-prevented events and flags $10.7\%$ of patients against $15.4\%$, a damped
-form of the cycle of F3, and the dashboard again ranks the rules in reverse.
+prevented events and flags $10.7\%$ of patients against $15.4\%$ for the
+refit on untreated patients, a damped form of the cycle of F3, and observed
+AUROC is lowest for the two rules that avert most ($0.660$ and $0.655$,
+against $0.669$ for the naive refit).
 
 \section{Related work}
 \label{sec:related}
@@ -728,7 +734,7 @@ the alert and its effect are simulated, the periods are anchor-year groups
 that date an admission only to within several years, and the split of the
 real drift into covariate and outcome terms has no ground truth. The
 calibrated operating point is deliberately strong (an acted-upon alert cuts
-the odds of the event by about 12, $28\%$ of patients are flagged only by the
+the odds of the event by a factor of about 12, $28\%$ of patients are flagged only by the
 alert, the untreated event rate is about $40\%$); magnitudes scale with these
 choices while the direction of the misattribution does not
 (Proposition~\ref{prop:misattr}; Table~\ref{tab:prevalence} in
@@ -1010,7 +1016,7 @@ of 50 seeds. Events are expected values on the evaluation population, without
 outcome noise, against standard care on the same population. The
 heterogeneous effect is $\theta + \kappa (X_2 - X_1)/\sqrt{2}$ on the logit
 scale; at $\kappa = 2$ the action is harmful for about $11\%$ of patients. The
-misspecified truth adds the term of Appendix~\ref{app:robustness}, $0.65\{X_1X_2 + 0.3(X_2^2 - 1)\}$ to the
+misspecified truth adds the term of Appendix~\ref{app:robustness} with $X_2$ in place of $X_3$, $0.65\{X_1X_2 + 0.3(X_2^2 - 1)\}$, to the
 untreated logit; there the original score is the population-best logistic
 approximation to the untreated risk, so a correct and stable update
 reproduces it. The weighted refit uses $1/P(A = 0 \mid X)$ from the alert rule
