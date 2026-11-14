@@ -1,4 +1,4 @@
-"""Regenerate every main-text figure from the saved JSON evidence (one command, task R4).
+"""Regenerate every figure from the saved JSON evidence (one command, task R4).
 
     python3 sim2/make_figures2.py
 
@@ -259,6 +259,8 @@ def main():
     figure_rd(E7)
     import make_figure_E1
     make_figure_E1.main()
+    import make_figure_overview
+    make_figure_overview.main()
     if (ROOT / "figures/fig7_mimic.pdf").exists():
         (ROOT / "aaai/figures/fig7_mimic.pdf").write_bytes((ROOT / "figures/fig7_mimic.pdf").read_bytes())
         print("copied fig7_mimic.pdf")

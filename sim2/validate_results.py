@@ -351,6 +351,14 @@ def check_tables():
         assert f"\\input{{tables/{name}}}" in TEX, f"tables/{name} is not included in the manuscript"
 
 
+def check_overview():
+    """Framework schematic (sim2/make_figure_overview.py) and the main-text summary built around it."""
+    same_figure("fig_overview.pdf")
+    assert "figures/fig_overview.pdf" in TEX, "overview figure is not included in the manuscript"
+    for label in ("fig:overview", "tab:findings", "app:details"):
+        assert f"\\label{{{label}}}" in TEX and f"\\ref{{{label}}}" in TEX, f"{label} is not defined and referenced"
+
+
 def check_style():
     assert "\u2014" not in TEX and "---" not in re.sub(r"%.*", "", TEX), "no em dashes (team convention)"
 
@@ -407,7 +415,8 @@ if __name__ == "__main__":
                      ("E5 sites", check_g2), ("E7 intervals", check_e7),
                      ("low prevalence", check_prevalence_estimators), ("E6 MIMIC-IV", check_e6),
                      ("E6 open stand-in", check_e6_open),
-                     ("generated tables", check_tables), ("style", check_style)):
+                     ("generated tables", check_tables), ("overview", check_overview),
+                     ("style", check_style)):
         fn()
         print(f"ok  {name}")
     print("Saved E1-E7 evidence, mirrored files, tables and quoted numbers validated")

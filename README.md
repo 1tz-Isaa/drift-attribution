@@ -93,7 +93,7 @@ part).
 ## Figures and tables
 
 ```sh
-python3 sim2/make_figures2.py        # main-text figures 1 to 6 and the Appendix A effect curve; copies Figure 7 if the MIMIC-IV run exists
+python3 sim2/make_figures2.py        # every results figure, the Appendix A effect curve and the framework overview (a schematic, `sim2/make_figure_overview.py`); copies the MIMIC-IV figure if that run exists
 python3 sim2/make_tables.py          # every generated table in aaai/tables/
 python3 sim2/make_status_update.py   # status figures and captions for the team (docs/status_update/)
 python3 sim2/validate_results.py
